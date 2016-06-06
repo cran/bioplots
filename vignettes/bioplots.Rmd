@@ -1,0 +1,108 @@
+<!--
+title: "bioplots"
+author: "Jianqiang Sun"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{bioplots vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+-->
+
+<!-- R -e "rmarkdown::render('bioplots.Rmd')" -->
+
+# bioplots
+
+
+**Visualization of Overlapping Results with Heatmap**
+
+
+Visualization of complex biological datasets is essential to understand
+complementary spects of biology in big data era.
+Analization of multiple datasets enables to understand biologcal process
+deeply and accurately.
+Multiple datasets produce multiple analysis results, and these overlapping
+results are usually visualized in Venn diagram.
+bioplots is a tiny R package that generates heatmap to visualize
+overlapping results instead of using Venn diagram.
+
+
+
+## Installation
+
+bioplots package is available on CRAN repository.
+It can be installed with `install.package` function.
+
+```{r installation_bioplots, eval=FALSE}
+install.packages("bioplots")
+```
+
+
+
+## Usage
+
+bioplots provides some plotting functions to generate figure from datasets.
+Functions in bioplots package can be listed up using `ls` function.
+
+```{r listup_all_functions}
+library(bioplots)
+ls("package:bioplots")
+```
+
+
+### HeatmapOverlaps
+
+`heatmap.overlaps` function generates heatmap to visualize overlapping results.
+Generally, overlapping results are visualized in Vennn diagrams.
+However, complex biological datasets usually give multiple Venn diagrams,
+and it complicates to interpret.
+`heatmap.overlaps` plots multiple Venn diagrams on one heatmap.
+
+`heatmap.overlaps` expects list object and matrix object as input data.
+The list object should be two-level as well as the second level lists should
+contain element sets corresponding to each cluster.
+Otherwise, if matrix object is given, row names should be the combination of
+overlap patterns, and column names should be the conditions.
+
+
+#### List Object
+
+A example with the given list object.
+
+```{r usage_venn2d_list}
+treat1 <- list(sample1 = c("KDR", "CUL3A", "RNS3", "DD46", "SHM6", "GLYR2", "NOF1", "PGDH", "WBC11"),
+               sample2 = c("KDR", "CUL3A", "DD46", "GLYR2", "NOF1", "ATCCMH", "DET3", "ATRBL6", "STP1"),
+               sample3 = c("KDR", "CUL3A", "RNS3", "NOF1", "ATCCMH", "SNL6"))
+treat2 <- list(sample1 = c("KDR", "CUL3A", "RNS3", "LEC1", "SHM6", "GLYR2", "NOF1", "PGDH", "LYM1"),
+               sample2 = c("KDR", "CUL3A", "DD46", "LEC1", "NOF1", "ATCCMH", "DET3", "ATRBL6", "STP1"),
+               sample3 = c("KDR", "LEC1", "DET3", "STP1", "ATCCMH", "SNL6"))
+treat3 <- list(sample1 = c("KDR", "CUL3A", "RNS3", "LEC1", "SHM6", "GLYR2", "ZFP6", "CLPP3", "GAD2"),
+               sample2 = c("KDR", "CUL3A", "DD46", "LEC1", "NOF1", "ATCCMH", "ZFP6", "GAD2"),
+               sample3 = c("KDR", "LEC1", "DET3", "STP1", "NOF1", "SK42"))
+dat.list <- list(Treat1 = treat1, Treat2 = treat2, Treat3 = treat3)
+
+heatmap.overlaps(dat.list)
+```
+
+
+#### Matrix Object
+
+A exmaple with the given matrix object.
+
+```{r usage_venn2d_matrix}
+mat <- matrix(rnbinom(135, size = 10, prob = 0.2), nrow = 15, ncol = 9)
+colnames(mat) <- paste0("Treat", 1:9)
+rownames(mat) <- c("a", "b", "c", "d", "ab", "ac", "ad", "bc", "bd", "cd",
+                   "abc", "abd", "acd", "bcd", "abcd")
+head(mat)
+
+heatmap.overlaps(mat)
+```
+
+
+
+
+
+
+
+
